@@ -101,7 +101,7 @@ bot.on("messageReactionAdd", (reaction, user) => {
   }
 });
 
-// Remove role to user on msg reaction removal
+// Remove role from user on msg reaction removal
 bot.on("messageReactionRemove", (reaction, user) => {
   const { name } = reaction.emoji;
   const member = reaction.message.guild.members.cache.get(user.id);
