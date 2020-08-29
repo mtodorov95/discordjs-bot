@@ -1,7 +1,9 @@
 require("dotenv").config();
 
 const { Client } = require("discord.js");
-const bot = new Client();
+const bot = new Client({
+  partials: ["MESSAGE", "REACTION"],
+});
 const PREFIX = "$";
 
 // Do something on 'ready' event
@@ -45,7 +47,7 @@ bot.on("message", async (message) => {
             message.channel.send("I do not have the power to kick that user")
           );
       } else {
-        message.channel.send("User not found");
+        message.channel.send("User was not found");
       }
     }
 
@@ -61,6 +63,51 @@ bot.on("message", async (message) => {
         console.log(error);
         message.channel.send("An error occured while trying to ban the user");
       }
+    }
+  }
+});
+
+// Add role to user on msg reaction
+bot.on("messageReactionAdd", (reaction, user) => {
+  const { name } = reaction.emoji;
+  const member = reaction.message.guild.members.cache.get(user.id);
+  // Msg ID that was reacted to
+  if (reaction.message.id === "749186524406480976") {
+    switch (name) {
+      case "🍎":
+        member.roles.add("749189686802514055"); // Role ID
+        break;
+      case "🍌":
+        member.roles.add("749189713159782440");
+        break;
+      case "🍇":
+        member.roles.add("749189735129415731");
+        break;
+      case "🍑":
+        member.roles.add("749189762916810852");
+        break;
+    }
+  }
+});
+
+// Remove role to user on msg reaction removal
+bot.on("messageReactionRemove", (reaction, user) => {
+  const { name } = reaction.emoji;
+  const member = reaction.message.guild.members.cache.get(user.id);
+  if (reaction.message.id === "749186524406480976") {
+    switch (name) {
+      case "🍎":
+        member.roles.remove("749189686802514055");
+        break;
+      case "🍌":
+        member.roles.remove("749189713159782440");
+        break;
+      case "🍇":
+        member.roles.remove("749189735129415731");
+        break;
+      case "🍑":
+        member.roles.remove("749189762916810852");
+        break;
     }
   }
 });
