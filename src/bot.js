@@ -1,9 +1,15 @@
 require("dotenv").config();
 
-const { Client } = require("discord.js");
+const { Client, WebhookClient } = require("discord.js");
 const bot = new Client({
   partials: ["MESSAGE", "REACTION"],
 });
+
+const webhookClient = new WebhookClient(
+  process.env.WEBHOOK_ID,
+  process.env.WEBHOOK_TOKEN
+);
+
 const PREFIX = "$";
 
 // Do something on 'ready' event
@@ -63,6 +69,11 @@ bot.on("message", async (message) => {
         console.log(error);
         message.channel.send("An error occured while trying to ban the user");
       }
+    }
+
+    if (CMD_NAME === "announce") {
+      const msg = args.join(" ");
+      webhookClient.send(msg);
     }
   }
 });
